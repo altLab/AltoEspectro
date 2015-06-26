@@ -9,3 +9,10 @@ Tendo como unidade de génese de sinais, leitura da saída do sensor, controlo d
 Notas do projecto podem ser encontradas no MicroSite de Documentação do AltLab 
 
 [aqui](http://altlab.org/d/s/projectos/altspectra/)
+
+Projecto Iniciado por:
+
+- Fernando Carvalho
+- JAC
+- Luis Dinis
+- Pedro Angelo
