@@ -37,10 +37,10 @@ void setup () {
 }
 void draw () {
   // everything happens in the serialEvent()
-  
 }
 
-void serialEvent (Serial myPort) {
+void serialEvent (Serial myPort) 
+{
   // get the ASCII string:
   String inString = myPort.readStringUntil('\n');
 

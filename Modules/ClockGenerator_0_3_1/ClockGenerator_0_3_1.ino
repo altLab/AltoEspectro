@@ -173,7 +173,7 @@ void getexposure()
   PORTB = (1 <<  ROG) | (1 << CLK)  ; // 0
   _delay_us(clockdelay);
   PORTB = (1 <<  ROG) | (1 << CLK)  ; // 0
-  _delay_us(clockdelay);
+  _delay_us(clockdelay);v
   PORTB = (1 <<  ROG) | (0 << CLK)  ; // 1
   _delay_us(clockdelay);
   PORTB = (1 <<  ROG) | (1 << CLK)  ; // 2

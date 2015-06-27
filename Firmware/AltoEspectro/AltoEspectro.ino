@@ -19,7 +19,7 @@ with a prescaler of 8   the adc clock is running at 2000 Khz the readout takes 6
 #define CLK  PORTB1  //Port Used for the clock - Pin9 in Arduino Uno
 
 
-#define BAUD 1000000
+#define BAUD 9600
 //#define USART_BAUDARATE 38400
 #define UBRR_VALUE (FOSC/(16*BAUD))-1
 
@@ -146,10 +146,12 @@ void USART_Transmit(char data)
 
 unsigned char USART_Receive(void)
 {
-  char data;
   while (!(UCSR0A) & (1 << RXC0));
   return UDR0;
 }
+
+
+
 void USART_Transmit_S(char *str)
 {
   while (*str)
@@ -309,10 +311,12 @@ int main(void) {
 
     //get command data
     char data = USART_Receive();
+    USART_Transmit(data);
+
 
     switch (data)
     {
-      case 'A':      
+      case 'A':
         USART_Transmit_S(ver);
         USART_Transmit_S("\r\n");
         break;
@@ -323,21 +327,15 @@ int main(void) {
         break;
 
       case 'C':
-        USART_Transmit_S("C");
+        USART_Transmit_S("#1");
         getexposure();
+        USART_Transmit_S("#2");c 
         break;
       default:
-      break;
+        break;
     }
 
-    //    USART_Transmit_S("#1");
-    //    getexposure();
-    //    USART_Transmit_S("#2");
-    //    _delay_ms(exposure);
-
-
     _delay_ms(1000);
-
   }
 }
 
