@@ -1,11 +1,12 @@
 #define ver "0_3_3"
+
 #define buffersize 8
 
 
 unsigned long ellapsedtime = 0;
 unsigned long starttime = 0;
-unsigned long internaltime = 201257639;
-
+unsigned long internaltime = 12345678;
+bool coolingState = false;
 
 
 char msg[buffersize] ;
@@ -18,24 +19,39 @@ void setup()
 
 void loop()
 {
- 
+
   Serial.readBytesUntil(62, msg, buffersize);
 
   switch (msg[1])
   {
+    // INIT
     case 'A':
       Serial.print('A'); Serial.print(' '); Serial.println(ver);
       break;
+    //SET TIMESTAMP
     case 'B':
       Serial.print('B');
-
       Serial.print(' ');
       Serial.print(msg[3]); Serial.print(msg[4]); Serial.print(msg[5]); Serial.println(msg[6]);
       break;
+    //GET SPECTRUM SAMPLE
     case 'C':
       Serial.println('C');
       Serial.print(msg[3]); Serial.print(msg[4]); Serial.print(msg[5]); Serial.println(msg[6]);
       getexposure();
+      break;
+    //GET TEMPERATURE SAMPLE
+    case 'D':
+      gettemperature();
+      break;
+    //SET TEMPERATURE
+    case 'E':
+      settemperature(value);
+      break;
+    //SET COOLING ON/OFF
+    case 'F':
+      //get data from buffer
+      setcooling(_state);
       break;
     default:
       break;
@@ -62,6 +78,18 @@ void loop()
 void getexposure()
 {
   Serial.print("Exposure Time");
-  Serial.println(internaltime);
+  Serial.print(internaltime);
   Serial.println("<dara></data>");
+}
+
+void gettemperature()
+{
+  Serial.print("");
+  Serial.print();
+  Serial.println("");
+}
+
+void setcooling(bool state)
+{
+  pinMode(Cooling, State);
 }

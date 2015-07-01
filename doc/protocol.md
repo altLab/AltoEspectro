@@ -24,7 +24,7 @@ Reply data: firmware version
 
 Sets the internal timestamp
 
-Request data: new timestamp in Unix Epoch time
+Request data: new timestamp in Julian Day with only the day part, and the time part = 0,500000
 Reply status: OK/NOK
 Reply data: none
 
@@ -56,7 +56,7 @@ Reply data: temperature readings (sensor and heatsink)
 
 Set the cooler on or OFF
 
-Request data: None
+Request data: "AS+F ON/OFF"
 Reply status: OK/NOK
 Reply data: Cooling Status TRUE:FALSE;
 
@@ -74,6 +74,7 @@ Reply data: Cooling Status TRUE:FALSE;
 ### Init
 
 Request: "AS+A"
+
 Reply: "OK <firmware version> <CR>"
 
 ### Set Timestamp
