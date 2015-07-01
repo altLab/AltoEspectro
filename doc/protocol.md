@@ -38,11 +38,36 @@ Reply data: sample timestamp, temperature readings (sensor and heatsink), data s
 
 ### Get Temperature Sample
 
-Get the tempearture values from the device
+Get the temperature values from the device
 
 Request data: none
 Reply status: OK/NOK
 Reply data: temperature readings (sensor and heatsink)
+
+### Set Temperature
+
+Set the temperature values for the device
+
+Request data: none
+Reply status: OK/NOK
+Reply data: temperature readings (sensor and heatsink)
+
+### Set Cooling ON/OFF
+
+Set the cooler on or OFF
+
+Request data: None
+Reply status: OK/NOK
+Reply data: Cooling Status TRUE:FALSE;
+
+## Get Cooling Status
+
+Get the Cooler Status ON/OFF
+
+Request data: None
+Reply status: OK/NOK
+Reply data: Cooling Status TRUE:FALSE;
+
 
 ## Text Encoding
 
@@ -66,6 +91,20 @@ Reply: "OK <timestamp> <sensor temperature> <heatsink temperature> <data0> <data
 Request: "AS+D"
 Reply: "OK <sensor temperature> <heatsink temperature> <CR>"
 
+
+### Set Temperature
+
+Request: "AS+E <sensor temperature>"
+Reply status: OK <sensor temperature>
+Reply data: "OK <sensor temperature> <heatsink temperature> <CR>"
+
+### Set Cooling ON/OFF
+
+Request data: "<AS+F ON/OFF>"
+Reply status: OK/NOK
+Reply data: "OK <sensor temperature> <heatsink temperature> <CR>"
+
+
 ## Binary Encoding
 
 ### Init
@@ -85,5 +124,25 @@ Reply: 0xA531 (OK) | 0xA5 (NOK) <timestamp (long int / 4 bytes)> <sensor tempera
 
 ### Get Temperature Sample
 
-Request: 0xA504
+
+Request: 0xA504 
 Reply: 0xA541 (OK) | 0xA540 (NOK) <sensor temperature (short int / 2 bytes)> <heatsink temperature (short int / 2 bytes)>
+
+
+### Get Temperature Sample
+
+Request: 0xA505
+Reply: "OK <sensor temperature> <heatsink temperature> <CR>"
+
+
+### Set Temperature
+
+Request: 0xA506 <sensor temperature>"
+Reply status: OK <sensor temperature>
+Reply data: "OK <sensor temperature> <heatsink temperature> <CR>"
+
+### Set Cooling ON/OFF
+
+Request data: 0xA507 
+Reply status: OK/NOK
+Reply data: "OK <sensor temperature> <heatsink temperature> <CR>"
