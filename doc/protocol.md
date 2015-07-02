@@ -75,7 +75,7 @@ Reply data: Cooling Status TRUE:FALSE;
 
 Request: "AS+A"
 
-Reply: "OK <firmware version> <CR>"
+Reply: "OK firmware version CR "
 
 ### Set Timestamp
 
