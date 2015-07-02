@@ -80,17 +80,17 @@ Reply: "OK <firmware version> <CR>"
 ### Set Timestamp
 
 Request: "AS+B <timestamp>"
-Reply: "OK <CR>"
+Reply: "OK <timestamp> <CR>"
 
 ### Get Spectrum Sample
 
 Request: "AS+C <exposure time>"
-Reply: "OK <timestamp> <sensor temperature> <heatsink temperature> <data0> <data1> ... <data_n> <CR>"
+Reply: "OK <timestamp> <sensor temperature> <heatsink temperature> <exposure> <data0> <data1> ... <data_n> <CR>"
 
 ### Get Temperature Sample
 
 Request: "AS+D"
-Reply: "OK <sensor temperature> <heatsink temperature> <CR>"
+Reply: "OK <timestamp> <sensor temperature> <heatsink temperature> <CR>"
 
 
 ### Set Temperature
@@ -130,20 +130,14 @@ Request: 0xA504
 Reply: 0xA541 (OK) | 0xA540 (NOK) <sensor temperature (short int / 2 bytes)> <heatsink temperature (short int / 2 bytes)>
 
 
-### Get Temperature Sample
-
-Request: 0xA505
-Reply: "OK <sensor temperature> <heatsink temperature> <CR>"
-
-
 ### Set Temperature
 
-Request: 0xA506 <sensor temperature>"
+Request: 0xA505 <sensor temperature>"
 Reply status: OK <sensor temperature>
 Reply data: "OK <sensor temperature> <heatsink temperature> <CR>"
 
 ### Set Cooling ON/OFF
 
-Request data: 0xA507 
+Request data: 0xA506 
 Reply status: OK/NOK
 Reply data: "OK <sensor temperature> <heatsink temperature> <CR>"
