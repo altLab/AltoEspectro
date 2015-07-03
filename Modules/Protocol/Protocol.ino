@@ -35,7 +35,7 @@ void loop()
 
   Serial.readBytesUntil(62, msg, buffersize);
 
-  //  Serial.println(msg);
+  AS//  Serial.print(msg);Serial.print('\t');
   //  Serial.println(msg[3]);
 
   //AS+A <INIT>

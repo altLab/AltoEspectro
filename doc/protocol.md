@@ -26,7 +26,7 @@ Sets the internal timestamp
 
 Request data: new timestamp in Julian Day with only the day part, and the time part = 0,500000
 Reply status: OK/NOK
-Reply data: none
+Reply data: internaltime
 
 ### Get Spectrum Sample 
 
@@ -35,6 +35,14 @@ Get a spectrum sample from the sensor
 Request data: exposure time in milliseconds
 Reply status: OK/NOK
 Reply data: sample timestamp, temperature readings (sensor and heatsink), data samples
+
+### Halt Spectrum Sample
+
+instructs device to Halt exposure.
+
+Request data: none
+Reply status: OK/NOK
+Reply data: None
 
 ### Get Temperature Sample
 
@@ -48,7 +56,7 @@ Reply data: temperature readings (sensor and heatsink)
 
 Set the temperature values for the device
 
-Request data: none
+Request data: Temperature in Signed Decimal Format with 1 Decimal Digit
 Reply status: OK/NOK
 Reply data: temperature readings (sensor and heatsink)
 
@@ -58,15 +66,23 @@ Set the cooler on or OFF
 
 Request data: "AS+F ON/OFF"
 Reply status: OK/NOK
-Reply data: Cooling Status TRUE:FALSE;
+Reply data: Cooling Status {ON/OFF};
 
-## Get Cooling Status
+### Get Cooling Status
 
 Get the Cooler Status ON/OFF
 
 Request data: None
 Reply status: OK/NOK
 Reply data: Cooling Status TRUE:FALSE;
+
+###Set Fan
+
+Sets the Fan ON or OFF
+
+Request data: ON/OFF
+Reply status: OK/NOK
+Reply data: Fan ON/OFF;
 
 
 ## Text Encoding
