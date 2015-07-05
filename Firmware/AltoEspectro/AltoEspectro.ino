@@ -1,5 +1,5 @@
 /*
-
+ *
 When pin 4 of the ILX544A
 - is connected to the 5V VCC the Sensor works in Store and Wipe Mode
 - is connected to the ground the Sensor works in Store and Hold Mode
@@ -8,23 +8,30 @@ usualy the Atmega takes 13 adc Clock pulses to make a readout.
 with a prescaler of 128 the adc clock is running at 125  Khz at this clock each readout takes 104uS
 with a prescaler of 16  the adc clock is running at 1000 KHz the readout takes 13  uS
 with a prescaler of 8   the adc clock is running at 2000 Khz the readout takes 6.5 uS
+
 */
 
 #define FOSC 16000000
+
 #ifndef F_CPU
 #define F_CPU 1600000UL
 #endif
 
-#define ROG  PORTB0  //Port used for the Release of Gate - pin8 in Arduino Uno
-#define CLK  PORTB1  //Port Used for the clock - Pin9 in Arduino Uno
+#define Mode 0          //Default Mode 0 = Text; Mode 1 = binary
 
+#define ROG  PORTB0     //Port used for the Release of Gate - pin8 in Arduino Uno
+#define CLK  PORTB1     //Port used for the clock - Pin9 in Arduino Uno
+#define SH PORTB2       //Port used for the Store and Hold - pin10
+#define COOLING PORTB3  //Port used for the digital IO for the Peltier Circuit
+
+#define FAN PORTD6      //Port used for the PWM Controling of the Fan
 
 #define BAUD 9600
 //#define USART_BAUDARATE 38400
 #define UBRR_VALUE (FOSC/(16*BAUD))-1
 
 
-#define ver "0_3_2"
+#define VER "0_3_3"
 
 //ILX544A signal sequence
 #define dsignal1 12
@@ -40,13 +47,14 @@ with a prescaler of 8   the adc clock is running at 2000 Khz the readout takes 6
 long exposure = 0;
 
 //timestamp global variable used to timestamp the exposures
-long timestamp = 0;
+unsigned long timestamp = 0;
 
-#define ADC_temp1 A0
-#define ADC_temp2 A1
+#define ADC_CCD 0
+#define ADC_peltier 1
+#define ADC_heatsink 2
 
-float temp1 = 0;
-float temp2 = 0;
+float peltiertemp = 0;
+float heatsinktemp = 0;
 
 //ROG and ClK Pulse typical is 5000 nS or 5 uS
 //432Khz delay = 1uS
@@ -62,9 +70,21 @@ uint8_t opticalblack_counter = 0;
 uint8_t dsignal2_counter = 0;
 uint16_t pixelcount_counter = 0;
 uint8_t dsignal3_counter = 0;
+
+#define buffersize 12
 char value[4];
+
+
 uint16_t sensorValue = 0;
+
 uint16_t counter = 0;
+
+char data;
+char command[buffersize];
+
+unsigned long ellapsedtime = 0;
+unsigned long starttime = 0;
+
 
 #include <SoftwareSerial.h>
 #include <stdio.h>
@@ -78,7 +98,7 @@ uint16_t counter = 0;
 //#include <stdbool.h>
 //#include <avr/pgmspace.h>
 
-
+#include "commands.h"
 
 
 void InitADC()
@@ -290,8 +310,79 @@ uint16_t sensortemp() {
   return temp;
 }
 
+void updateTemp()
+{
+  peltiertemp = ReadADC(ADC_peltier);
+  heatsinktemp = ReadADC(ADC_heatsink);
+}
 
-int main(void) {
+void processtextmodecommand(char* data)
+{
+  switch (data[3])
+  {
+    case INIT_T:
+      USART_Transmit_S(NACK);
+      USART_Transmit(SPACE);
+      USART_Transmit_S(VER);
+      USART_Transmit(CR);
+      break;
+
+    case SET_TIMESTAMP_T:
+      USART_Transmit_S(NACK);
+      USART_Transmit(SPACE);
+      USART_Transmit(SET_TIMESTAMP_T);
+      USART_Transmit_S(data);
+      break;
+
+    case GET_SPECTRUMSAMPLE_T:
+      USART_Transmit_S("#1");
+      getexposure();
+      USART_Transmit_S("#2");
+      break;
+    default:
+      break;
+  }
+}
+
+void processbinmodecommand(char* data)
+{
+  switch (data[3])
+  {
+    case INIT_B:
+      USART_Transmit_S(NACK);
+      USART_Transmit_S(VER);
+      USART_Transmit_S("\r\n");
+      break;
+
+    case SET_TIMESTAMP_B:
+      USART_Transmit_S("B");
+      USART_Transmit_S(data);
+      break;
+
+    case GET_SPECTRUMSAMPLE_B:
+      USART_Transmit_S("#1");
+      getexposure();
+      USART_Transmit_S("#2");
+      break;
+    default:
+      break;
+  }
+}
+
+void processcommand(char* _data)
+{
+  if (!Mode)
+  {
+    processtextmodecommand(_data);
+  }
+  if (Mode)
+  {
+    processbinmodecommand(_data);
+  }
+}
+
+int main(void)
+{
 
   //define port B for output
   DDRB = 0x1f;
@@ -303,40 +394,48 @@ int main(void) {
   InitADC();
   USART_Transmit_S("ADC Inited\r\n");
 
-
+  starttime = millis();
 
 
   // put your main code here, to run repeatedly: the loop void in Arduino Code
-  while (1) {
+  while (1)
+  {
+    updateTemp();
+    //get command data until end of command reached
+    unsigned int buffer_counter = 0;
 
-    //get command data
-    char data = USART_Receive();
-    USART_Transmit(data);
-
-
-    switch (data)
+    while (data != COMMAND_END)
     {
-      case 'A':
-        USART_Transmit_S(ver);
-        USART_Transmit_S("\r\n");
-        break;
-
-      case 'B':
-        USART_Transmit_S("B");
-        USART_Transmit(data);
-        break;
-
-      case 'C':
-        USART_Transmit_S("#1");
-        getexposure();
-        USART_Transmit_S("#2");c 
-        break;
-      default:
-        break;
+      data = USART_Receive();
+      command[buffer_counter] = data;
+      buffer_counter++;
     }
 
-    _delay_ms(1000);
+    processcommand(command);
+    USART_Transmit_S(command);
+
+    //    _delay_ms(1000);
+
+    //Initialization the USART data buffer
+    buffer_counter = 0;
+    //clean the array of data
+    while (buffer_counter <= buffersize)
+    {
+      command[buffer_counter] = 0;
+      buffer_counter++;
+    }
+    //Initialization End of USART data Buffer
   }
+
+  //evaluation start ellapsedtime case true for ellapsedtime update internal time
+  ellapsedtime = millis() - starttime;
+
+  ellapsedtime = ellapsedtime / 100;
+
+  if (ellapsedtime >= 1)
+  {
+    timestamp = timestamp + ellapsedtime;
+    starttime = millis();
+  }
+  //evaluation End ellapsedtime case true for ellapsedtime update internal time
 }
-
-
