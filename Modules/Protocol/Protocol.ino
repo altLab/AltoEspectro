@@ -1,3 +1,5 @@
+#include <stdlib.h> 
+
 
 #define ver "0_3_3"
 
@@ -10,7 +12,7 @@
 unsigned long ellapsedtime = 0;
 unsigned long starttime = 0;
 
-unsigned long internaltime = 1234567;
+unsigned long internaltime = 0;
 
 bool coolingstate = false;
 
@@ -20,6 +22,8 @@ float coolingtemperature = 0;
 float heatsinktemperature = 0;
 
 float exposure = 0;
+
+String inString = "";
 
 
 void setup()
@@ -36,7 +40,7 @@ void loop()
 
   Serial.readBytesUntil(62, msg, buffersize);
 
-  AS//  Serial.print(msg);Serial.print('\t');
+  //  Serial.print(msg);Serial.print('\t');
   //  Serial.println(msg[3]);
 
   //AS+A <INIT>
@@ -50,12 +54,30 @@ void loop()
   if (msg[3] == 66)
   {
     Serial.print("OK ");
-    Serial.println(msg[5] + msg[6] + msg[7] + msg[8] + msg[9] + msg[10] + msg[11]);
-    internaltime = (long)(msg[5] + msg[6] + msg[7] + msg[8] + msg[9] + msg[10] + msg[11]);
+//    Serial.print(msg[5]);
+//    Serial.print(msg[6]); 
+//    Serial.print(msg[7]);
+//    Serial.print(msg[8]);
+//    Serial.print(msg[9]);
+//    Serial.print(msg[10]);
+//    Serial.print(msg[11]);
+    
+    for (int i = 5 ; i <= 11;i++)
+    {
+      inString += msg[i];
+    }
+
+    internaltime = inString.toInt();
+
+    // internaltime = strtoul(inString,NULL,0);
+    
+//     Serial.println(inString);
+    //    internaltime = (long)(msg[5] + msg[6] + msg[7] + msg[8] + msg[9] + msg[10] + msg[11]);
+
     Serial.println(internaltime);
   }
   //DEBUG
-  //AS*C <Exposure Time>
+  //AS+C <Exposure Time>
   //GET SAMPLE DATA
   if (msg[3] == 67)
   {
@@ -69,7 +91,7 @@ void loop()
     getexposure();
     Serial.println();
   }
-  //AS*D
+  //AS+D
   //GET TEMPERATURE
   if (msg[3] == 68)
   {
@@ -81,7 +103,7 @@ void loop()
   }
 
   //DEBUG
-  //AS*E <ooling temperature>
+  //AS+E <ooling temperature>
   //SET TEMPERATURE
   if (msg[3] == 69)
   {
@@ -90,7 +112,7 @@ void loop()
     Serial.print(coolingtemperature);
     Serial.println();
   }
-  //AS*F <status>
+  //AS+F <status>
   //SET COOLING ON/OFF
   if (msg[3] == 70)
   {
@@ -101,17 +123,18 @@ void loop()
     {
       setcooling(true);
       coolingstate = true;
-      Serial.println("ON");
+      Serial.print("ON");
     }
     if (msg[5] == 79 && msg[6] == 70 && msg[7] == 70)
     {
       setcooling(false);
       coolingstate = false;
-      Serial.println("OFF");
+      Serial.print("OFF");
     }
+    Serial.println();
   }
 
-  //AS*G
+  //AS+G
   //GET COOLING STATUS
   if (msg[3] == 71)
   {
@@ -133,7 +156,7 @@ void loop()
   {
     internaltime = internaltime + ellapsedtime;
     starttime = millis();
-    //    Serial.println(internaltime);
+    //Serial.println(internaltime);
   }
 
 }
