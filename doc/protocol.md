@@ -24,65 +24,65 @@ Reply data: firmware version <BR>
 
 Sets the internal timestamp
 
-Request data: new timestamp in Julian Day with only the day part, and the time part = 0,500000
-Reply status: OK/NOK
-Reply data: internaltime
+Request data: new timestamp in Julian Day with only the day part, and the time part = 0,500000 <BR>
+Reply status: OK/NOK <BR>
+Reply data: internaltime <BR>
 
 ### Get Spectrum Sample 
 
 Get a spectrum sample from the sensor
 
-Request data: exposure time in milliseconds
-Reply status: OK/NOK
-Reply data: sample timestamp, temperature readings (sensor and heatsink), data samples
+Request data: exposure time in milliseconds <BR>
+Reply status: OK/NOK <BR>
+Reply data: sample timestamp, temperature readings (sensor and heatsink), data samples <BR>
 
 ### Halt Spectrum Sample
 
 instructs device to Halt exposure.
 
-Request data: none
-Reply status: OK/NOK
-Reply data: None
+Request data: none <BR>
+Reply status: OK/NOK <BR>
+Reply data: None <BR>
 
 ### Get Temperature Sample
 
 Get the temperature values from the device
 
-Request data: none
-Reply status: OK/NOK
-Reply data: temperature readings (sensor and heatsink)
+Request data: none <BR>
+Reply status: OK/NOK <BR>
+Reply data: temperature readings (sensor and heatsink) <BR>
 
 ### Set Temperature
 
 Set the temperature values for the device
 
-Request data: Temperature in Signed Decimal Format with 1 Decimal Digit
-Reply status: OK/NOK
-Reply data: temperature readings (sensor and heatsink)
+Request data: Temperature in Signed Decimal Format with 1 Decimal Digit <BR>
+Reply status: OK/NOK <BR>
+Reply data: temperature readings (sensor and heatsink) <BR>
 
 ### Set Cooling ON/OFF
 
 Set the cooler on or OFF
 
-Request data: "AS+F ON/OFF"
-Reply status: OK/NOK
-Reply data: Cooling Status {ON/OFF};
+Request data: "AS+F ON/OFF" <BR>
+Reply status: OK/NOK <BR>
+Reply data: Cooling Status {ON/OFF}; <BR>
 
 ### Get Cooling Status
 
-Get the Cooler Status ON/OFF
+Get the Cooler Status ON/OFF 
 
-Request data: None
-Reply status: OK/NOK
-Reply data: Cooling Status TRUE:FALSE;
+Request data: None <BR>
+Reply status: OK/NOK <BR>
+Reply data: Cooling Status TRUE:FALSE; <BR>
 
 ###Set Fan
 
 Sets the Fan ON or OFF
 
-Request data: ON/OFF
-Reply status: OK/NOK
-Reply data: Fan ON/OFF;
+Request data: ON/OFF <BR>
+Reply status: OK/NOK <BR>
+Reply data: Fan ON/OFF; <BR>
 
 
 ## Text Encoding
@@ -95,31 +95,31 @@ Reply: "OK firmware version CR "
 
 ### Set Timestamp
 
-Request: "AS+B <timestamp>"
-Reply: "OK <timestamp> <CR>"
+Request: "AS+B <timestamp>" <BR>
+Reply: "OK <timestamp> <CR>" <BR>
 
 ### Get Spectrum Sample
 
-Request: "AS+C <exposure time>"
-Reply: "OK <timestamp> <sensor temperature> <heatsink temperature> <exposure> <data0> <data1> ... <data_n> <CR>"
+Request: "AS+C <exposure time>" <BR>
+Reply: "OK <timestamp> <sensor temperature> <heatsink temperature> <exposure> <data0> <data1> ... <data_n> <CR>" <BR>
 
 ### Get Temperature Sample
 
-Request: "AS+D"
-Reply: "OK <timestamp> <sensor temperature> <heatsink temperature> <CR>"
+Request: "AS+D" <BR>
+Reply: "OK <timestamp> <sensor temperature> <heatsink temperature> <CR>" <BR>
 
 
 ### Set Temperature
 
-Request: "AS+E <sensor temperature>"
-Reply status: OK <sensor temperature>
-Reply data: "OK <sensor temperature> <heatsink temperature> <CR>"
+Request: "AS+E <sensor temperature>" <BR>
+Reply status: OK <sensor temperature> <BR>
+Reply data: "OK <sensor temperature> <heatsink temperature> <CR>" <BR>
 
 ### Set Cooling ON/OFF
 
-Request data: "<AS+F ON/OFF>"
-Reply status: OK/NOK
-Reply data: "OK <sensor temperature> <heatsink temperature> <CR>"
+Request data: "<AS+F ON/OFF>" <BR>
+Reply status: OK/NOK <BR>
+Reply data: "OK <sensor temperature> <heatsink temperature> <CR>" <BR>
 
 
 ## Binary Encoding
