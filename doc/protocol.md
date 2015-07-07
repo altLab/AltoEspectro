@@ -16,9 +16,9 @@ The device replies with a reply header that indicates the request status followe
 
 Initialises the device
 
-Request data: none
-Reply status: OK/NOK
-Reply data: firmware version
+Request data: none <BR>
+Reply status: OK/NOK <BR>
+Reply data: firmware version <BR>
 
 ### Set Timestamp
 
