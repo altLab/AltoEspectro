@@ -76,6 +76,15 @@ Request data: None <BR>
 Reply status: OK/NOK <BR>
 Reply data: Cooling Status TRUE:FALSE; <BR>
 
+###Get Status
+
+gets the internal Status of the device
+
+Request data: NULL<BR>
+Reply status: OK/NOK <BR>
+Reply data: <Version> <timestamp> <coolingtemperature> <heatsinktemperature> <exposing> <cooling> <fan> <BR>
+
+
 ###Set Fan
 
 Sets the Fan ON or OFF
@@ -83,6 +92,7 @@ Sets the Fan ON or OFF
 Request data: ON/OFF <BR>
 Reply status: OK/NOK <BR>
 Reply data: Fan ON/OFF; <BR>
+
 
 
 ## Text Encoding
@@ -103,23 +113,34 @@ Reply: "OK <timestamp> <CR>" <BR>
 Request: "AS+C <exposure time>" <BR>
 Reply: "OK <timestamp> <sensor temperature> <heatsink temperature> <exposure> <data0> <data1> ... <data_n> <CR>" <BR>
 
-### Get Temperature Sample
+### Halt Spectrum Sample
 
 Request: "AS+D" <BR>
-Reply: "OK <timestamp> <sensor temperature> <heatsink temperature> <CR>" <BR>
+Reply: OK/NOK <BR>
 
+### Get Temperature Sample
+
+Request: "AS+E" <BR>
+Reply: "OK <timestamp> <sensor temperature> <heatsink temperature> <CR>" <BR>
 
 ### Set Temperature
 
-Request: "AS+E <sensor temperature>" <BR>
+Request: "AS+F <sensor temperature>" <BR>
 Reply status: OK <sensor temperature> <BR>
 Reply data: "OK <sensor temperature> <heatsink temperature> <CR>" <BR>
 
 ### Set Cooling ON/OFF
 
-Request data: "<AS+F ON/OFF>" <BR>
+Request data: "<AS+G ON/OFF>" <BR>
 Reply status: OK/NOK <BR>
 Reply data: "OK <sensor temperature> <heatsink temperature> <CR>" <BR>
+
+### Get Status
+
+Request data: "<AS+H>" <BR>
+Reply status: OK/NOK <BR>
+Reply data: "OK <version> <timestamp> <sensor temperature> <heatsink temperature> <CR>" <BR>
+
 
 
 ## Binary Encoding
